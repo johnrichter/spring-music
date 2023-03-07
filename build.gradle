@@ -42,10 +42,17 @@ dependencies {
     implementation "org.webjars:angular-ui:0.4.0-2"
     implementation "org.webjars:angular-ui-bootstrap:0.10.0-1"
     implementation "org.webjars:jquery:2.1.0-2"
+    implementation "net.logstash.logback:logstash-logback-encoder:6.6"
+    // https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder
+    // implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6'
+
+    implementation "com.datadoghq:dd-java-agent:0.90.0"
 
     // Oracle - uncomment one of the following after placing driver in ./libs
     // compile files('libs/ojdbc8.jar')
     // compile files('libs/ojdbc7.jar')
+
+    // compile "com.datadoghq:dd-java-agent:0.88.0"
 
     // Testing
     testImplementation "junit:junit"
@@ -54,7 +61,7 @@ dependencies {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11
 
     if (JavaVersion.current() != project.targetCompatibility) {
         logger.warn("The build is using Java ${JavaVersion.current()} to build a Java ${project.targetCompatibility} compatible archive.")

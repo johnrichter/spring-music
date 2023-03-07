@@ -5,6 +5,20 @@ applications:
   random-route: true
   path: build/libs/spring-music-1.0.jar
   env:
+    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
     SPRING_PROFILES_ACTIVE: http2
-#    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+    DD_API_KEY: <DD_API_KEY>
+    RUN_AGENT: true
+    DD_LOGS_ENABLED: true
+    DD_ENABLE_CHECKS: false
+    STD_LOG_COLLECTION_PORT: 10514
+    DD_LOGS_CONFIG_USE_HTTP: true
+    DD_LOGS_CONFIG_USE_COMPRESSION: true
+    DD_LOGS_CONFIG_COMPRESSION_LEVEL: 6
+    LOGS_CONFIG: '[{"type":"tcp","port":"10514","source":"java","service":"springmusic"}]'
+    JAVA_OPTS: '-javaagent:BOOT-INF/lib/dd-java-agent-0.90.0.jar -Ddd.version=1.0 -Ddd.service=springmusic -Ddd.logs.injection=true -Ddd.env=test -Ddd.trace.sample.rate=1 -Ddd.profiling.enabled=true -Ddd.profiling.allocation.enabled=true -XX:FlightRecorderOptions=stackdepth=256'
+  buildpacks:
+  - datadog-cloudfoundry-buildpack
+  - java_buildpack_offline
+  # - binary_buildpack
