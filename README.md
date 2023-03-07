@@ -1,5 +1,12 @@
-Spring Music
-============
+# Datadog Instructions
+
+This is a fork of Spring Music with Datadog APM and RUM added for PCF deployments
+
+Configure `manifest.yml` with your Datadog API key.
+
+Configure `src/main/resources/static/index.html` with your RUM `applicationId`, `clientToken`, `site`, `service`, and `allowedTracingOrigins` (for correlation to the spring music backend application. It'll be the domain that spring music is deployed to)
+
+# Spring Music
 
 This is a sample application for using database services on [Cloud Foundry](http://cloudfoundry.org) with the [Spring Framework](http://spring.io) and [Spring Boot](http://projects.spring.io/spring-boot/).
 
@@ -13,9 +20,9 @@ This project requires a Java version between 8 and 17 to compile.
 
 To build a runnable Spring Boot jar file, run the following command:
 
-~~~
+```
 $ ./gradlew clean assemble
-~~~
+```
 
 ## Running the application locally
 
@@ -23,16 +30,16 @@ One Spring bean profile should be activated to choose the database provider that
 
 The application can be started locally using the following command:
 
-~~~
+```
 $ java -jar -Dspring.profiles.active=<profile> build/libs/spring-music.jar
-~~~
+```
 
 where `<profile>` is one of the following values:
 
-* `mysql`
-* `postgres`
-* `mongodb`
-* `redis`
+- `mysql`
+- `postgres`
+- `mongodb`
+- `redis`
 
 If no profile is provided, an in-memory relational database will be used. If any other profile is provided, the appropriate database server must be started separately. Spring Boot will auto-configure a connection to the database using it's auto-configuration defaults. The connection parameters can be configured by setting the appropriate [Spring Boot properties](http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html).
 
@@ -48,9 +55,9 @@ If more than one service containing any of these values is bound to the applicat
 
 After installing the 'cf' [command-line interface for Cloud Foundry](http://docs.cloudfoundry.org/cf-cli/), targeting a Cloud Foundry instance, and logging in, the application can be built and pushed using these commands:
 
-~~~
+```
 $ cf push
-~~~
+```
 
 The application will be pushed using settings in the provided `manifest.yml` file. The output from the command will show the URL that has been assigned to the application.
 
@@ -62,7 +69,7 @@ Using the provided manifest, the application will be created without an external
 
 Depending on the Cloud Foundry service provider, persistence services might be offered and managed by the platform. These steps can be used to create and bind a service that is managed by the platform:
 
-~~~
+```
 # view the services available
 $ cf marketplace
 # create a service instance
@@ -71,7 +78,7 @@ $ cf create-service <service> <service plan> <service name>
 $ cf bind-service <app name> <service name>
 # restart the application so the new service is detected
 $ cf restart
-~~~
+```
 
 #### User-provided services
 
@@ -79,7 +86,7 @@ Cloud Foundry also allows service connection information and credentials to be p
 
 These steps use examples for username, password, host name, and database name that should be replaced with real values.
 
-~~~
+```
 # create a user-provided Oracle database service instance
 $ cf create-user-provided-service oracle-db -p '{"uri":"oracle://root:secret@dbserver.example.com:1521/mydatabase"}'
 # create a user-provided MySQL database service instance
@@ -88,17 +95,17 @@ $ cf create-user-provided-service mysql-db -p '{"uri":"mysql://root:secret@dbser
 $ cf bind-service <app name> <service name>
 # restart the application so the new service is detected
 $ cf restart
-~~~
+```
 
 #### Changing bound services
 
 To test the application with different services, you can simply stop the app, unbind a service, bind a different database service, and start the app:
 
-~~~
+```
 $ cf unbind-service <app name> <service name>
 $ cf bind-service <app name> <service name>
 $ cf restart
-~~~
+```
 
 #### Database drivers
 
@@ -107,7 +114,6 @@ Database drivers for MySQL, Postgres, Microsoft SQL Server, MongoDB, and Redis a
 To connect to an Oracle database, you will need to download the appropriate driver (e.g. from http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html). Then make a `libs` directory in the `spring-music` project, and move the driver, `ojdbc7.jar` or `ojdbc8.jar`, into the `libs` directory.
 In `build.gradle`, uncomment the line `compile files('libs/ojdbc8.jar')` or `compile files('libs/ojdbc7.jar')` and run `./gradle assemble`.
 
-
 ## Alternate Java versions
 
 By default, the application will be built and deployed using Java 8 compatibility.
@@ -115,19 +121,19 @@ If you want to use a more recent version of Java, you will need to update two th
 
 In `build.gradle`, change the `targetCompatibility` Java version:
 
-~~~
+```
 java {
   ...
   targetCompatibility = JavaVersion.VERSION_1_8
 }
-~~~
+```
 
 Set `targetCompatibility` to `JavaVersion.VERSION_11` for Java 11 or `JavaVersion.VERSION_17` for Java 17.
 
 In `manifest.yml`, uncomment and change the Java buildpack JRE version:
 
-~~~
+```
 #    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
-~~~
+```
 
 Set the version to `11.+` for Java 11 or `17.+` for Java 17.
